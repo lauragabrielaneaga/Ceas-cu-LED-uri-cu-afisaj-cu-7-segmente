@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html>
+<body><body style="background-color:Peachpuff;">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<h1 style="text-align:center;">Ceas cu LED-uri, cu afisaj cu 7 segmente, cu cronometru, calendar şi alarmă</h1>
+<h2 style="text-align:center;">Studenți: Constantin Iulia-Gabriela și Neaga Laura-Gabriela</h2>
+<h2 style="text-align:center;">Echipa: 26 </h2>
+<hr>
+
+<h2>Modul de implementare</h2>
+<hr>
+<p style="text-indent:3em;">Pentru realizarea proiectului, am considerat necesare (pe l&acirc;ngă componentele din documentația primită) 6 afișaje cu 7 segmente: pe acestea vom afișa pe r&acirc;nd ora, data, alarma, cronometrul. Fiecare dintre aceste opțiuni se poate seta dintr-un buton cu apăsare (push-button), iar &icirc;n funcție de opțiunea selectată se va aprinde un led colorat corespunzător pentru a semnaliza cărei opțiuni ii corespunde valoarea de pe afisaje <br>(LED <strong>roșu</strong> &ndash; &bdquo;Ceas&rdquo; , LED <strong>verde</strong> &ndash; &bdquo;Calendar&rdquo;, LED <strong>galben</strong> &ndash; &bdquo;Alarmă&rdquo;, LED <strong>albastru</strong> &ndash; &bdquo;Cronometru&rdquo;).</p>
+<p>FORMAT OPȚIUNI:</p>
+<p><strong>Format &bdquo;Ceas&rdquo; :</strong> ora.minute.secunde&nbsp; -&gt;&nbsp; OO.MM.SS<br>
+<strong>Format &bdquo;Calendar&rdquo; :</strong> zi.lună.an&nbsp; -&gt;&nbsp; ZZ.LL.AA<br>
+<strong>Format &bdquo;Cronometru&rdquo;:</strong> ora.minute.secunde -&gt; OO.MM.SS<br>
+<strong>Format &bdquo;Alarmă&rdquo;:</strong> ora.minute.secunde -&gt; OO.MM.SS<br></p>
+
+
+
+
+<p>Afișajele și LED-urile vor fi controlate prin 6 butoane (push-button, THD), &icirc;n următorul mod:</p>
+<ul>
+<p><li><strong>SW3</strong>- prin acest buton se selectează opțiunea &bdquo;Ceas&rdquo;, ce presupune afișarea orelor, minutelor și secundelor. Valorile acestor variabile au fost inițializate &icirc;n cod, &icirc;nsă ele pot fi modificate prin apăsarea butoanelor (de reglaj) SW7 și SW8. La fiecare apăsare a butonului SW1, se aprinde LED-ul roșu, pentru a indica utilizatorului opțiunea selectată dintre cele patru, iar afișajele cu 7 segmente vor afișa formatul corespunzător.</li></p>
+
+<p><li><strong>SW4</strong>- prin acest buton se selectează opțiunea &bdquo;Calendar&rdquo;, ce presupune afișarea zilei, lunii și a anului. Valorile acestor variabile au fost inițializate &icirc;n cod, &icirc;nsă ele pot fi modificate prin apăsarea butoanelor (de reglaj) SW7 și SW8. La fiecare apăsare a butonului SW2, se aprinde LED-ul verde, pentru a indica utilizatorului opțiunea selectată dintre cele patru, iar afișajele cu 7 segmente vor afișa formatul corespunzător.</li></p>
+
+<p><li><strong>SW5</strong>- prin acest buton se selectează opțiunea &bdquo;Alarmă&rdquo;. Inițial, la prima apăsare, se afișează &bdquo;A&rdquo; pe primul afișaj cu 7 segmente, pentru a sugera faptul că utilizatorul trebuie să seteze ora la care vrea să sune alarma. Apoi, după o secundă, se afișează 00 00 00, iar utilizatorul poate &icirc;ncepe reglarea orei de alarmă, prin intermediul butoanelor (de reglaj) SW7 și SW8. La fiecare apăsare a butonului SW3, se aprinde LED-ul galben, pentru a indica utilizatorului opțiunea selectată dintre cele patru, iar afișajele cu 7 segmente vor afișa formatul corespunzător.</li></p>
+
+<p><li><strong>SW6</strong>- prin acest buton se selectează opțiunea &bdquo;Cronometru&rdquo;. Inițial, la prima apăsare, se afișează &bdquo;C&rdquo; pe primul afișaj cu 7 segmente, pentru a sugera faptul că utilizatorul poate porni cronometrul prin următoarea apăsare (START). Pentru a opri cronometrul (STOP), se apasă din nou pe SW4, iar valoarea cronometrată va răm&acirc;ne afișată pe LED-urile cu 7 segmente p&acirc;nă c&acirc;nd se apasă iar butonul SW4 (pentru a relua cronometrarea) sau un alt buton (pentru trecerea &icirc;ntr-unul dintre celelalte moduri disponibile). La fiecare apăsare a butonului SW4, se aprinde LED-ul albastru, pentru a indica utilizatorului opțiunea selectată dintre cele patru, iar afișajele cu 7 segmente vor afișa formatul corespunzător.</li></p>
+
+<p><li><strong>SW7</strong>&ndash; prin acest buton se pot incrementa valorile pentru minute, respectiv lună, atunci c&acirc;nd ne aflăm &icirc;n modul &bdquo;Ceas&rdquo;, &bdquo;Alarmă&rdquo;, respectiv &rdquo;Calendar&rdquo;. Valorile pot fi modificate cu c&acirc;te o unitate, prin apăsarea scurtă a butonului, sau mai rapid, prin apăsare lungă, &icirc;n funcție de c&acirc;t de &icirc;ndepărtate sunt valorile ce se doresc a fi setate.</li></p>
+
+<p><li><strong>SW8</strong>&ndash; prin acest buton se pot incrementa valorile pentru oră, respectiv zi, atunci c&acirc;nd ne aflăm &icirc;n modul &bdquo;Ceas&rdquo;, &bdquo;Alarmă&rdquo;, respectiv &rdquo;Calendar&rdquo;. Valorile pot fi modificate cu c&acirc;te o unitate, prin apăsarea scurtă a butonului, sau mai rapid, prin apăsare lungă, &icirc;n funcție de c&acirc;t de &icirc;ndepărtate sunt valorile ce se doresc a fi setate.</li>
+</ul></p>
+
+<p>De asemenea, &icirc;n cazul implementării alarmei, vom avea nevoie de un <strong>buzzer</strong> (configurație cu un tranzistor și un rezistor &ndash; vezi secțiunea &bdquo;Descrierea hardware&rdquo;), pentru a produce un sunet la ora setată.</p>
+
+<h2 style="text-align:center;"><img src="mi2.png" alt="mi2" width="800"  hspace="10"></h2>
+
+<p><strong>COMPONENTE ADIȚIONALE</strong></p>
+<ol>
+<li><a href="https://ardushop.ro/ro/home/2352-display-led-7-segmente-036-inch.html">Display LED 7 segmente - 6 buc, ardushop.ro</a></li>
+</ol>
+<p><strong>Culoare:</strong>&nbsp;roşie<br /><strong>Tensiune de alimentare segment:</strong>&nbsp;1.8V DC<br /><strong>Consum curent segment:</strong>&nbsp;10mA<br /><strong>Luminozitate:</strong>&nbsp;2.8-3.6mcd<br /><strong>Electrod comun:</strong>&nbsp;catod<br /><strong>Pitch terminale:</strong>&nbsp;2.54mm<br /><strong>Distanţă &icirc;ntre r&acirc;nduri:</strong>&nbsp;5.08mm<br /><strong>Lungime undă:</strong>&nbsp;640nm<br /><strong>Dimensiuni (Lxl):&nbsp;</strong>14 x 7.5 [mm]</p>
+<p>Am ales aceste afișaje de dimensiune mai mică pentru a nu ocupa mult spațiu pe cablaj.</p>
+<ol start="2">
+<li><a href="https://ardushop.ro/ro/home/97-buton-mic-push-button-trough-hole.html#/11-culoare-negru">Push Button - 6 buc, ardushop.ro</a></li>
+</ol>
+<p>Buton 6x6x6 - THD<br />Normal deschis</p>
+<ol start="3">
+<li><a href="https://ardushop.ro/ro/electronica/194-buzzer.html#/63-tip-pasiv">Buzzer pasiv - 1 buc, ardushop.ro</a></li>
+<li><a href="https://ardushop.ro/ro/electronica/79-led-3mm.html#/10-culoare-rou">LED-uri colorate</a><u> &ndash; 3 buc, stoc UPB</u></li>
+<li>Rezistoare &ndash; diverse valori, stoc propriu</li>
+</ol>
+<p>220 Ohm THT &ndash; folosite cu afișajele cu 7 segmente și buzzer</p>
+<p>1 kOhm THT -&nbsp; folosite cu afișajele cu 7 segmente alături de tranzistoare pentru multiplexare</p>
+<p>470 Ohm THT &ndash; limitare curent LED-uri colorate</p>
+<p><strong>&nbsp;</strong></p>
+<ol start="6">
+<li><a href="https://ardushop.ro/ro/electronica/541-tranzistor-pnp-bipolar-bc557cbk.html?search_query=LPWYPQ_BC547BBK-DIO&amp;results=119">Tranzistor NPN bipolar BC547BBK, ardushop.ro</a></li>
+</ol>
+<p><strong>Tensiune colector-emitor: </strong>45V</p>
+<p><strong>Curent de colector:</strong> 100mA</p>
+<p><strong>Carcasă:</strong> TO92</p>
+<p><strong>Amplificare curent:</strong> 200</p>
+<p><strong>Montare:</strong> THT</p>
+<p>OBS: Tranzistoarele au fost alese de tip NPN pentru a putea realiza multiplexarea pentru afișajele cu 7 segmente cu catod comun.<br>Fotografia de mai jos a fost realizată în momentul în care nu aveam încă toate componentele achiziționate.</p>
+
+
+
+<h2 style="text-align:center;"><img src="mi1.jpeg" alt="mi2" width="800"  hspace="10"></h2>
+<hr>
+<h2>Descriere hardware</h2>
+<hr>
+
+<p style="text-indent:3em;">Într-o primă etapă, am lipit condensatoarele C5, C6, C11, C12, C13 de 100nF, respectiv C2, C3 de 22pF. Ulterior, am plasat rezistoarele R1 (10 kOhm) și R2 (470 Ohm), apoi componentele THD: cuarțul, cele două butoane, condensatorul de 1uF, LED-ul, jumper-ul J1, conectorul TTL-USB, soclul microcontroller-ului ATMega164A. La final, am lipit un fir în locul lui F1. Am pus jumper-ul J1 pe poziția 2-3.Ulterior, am adăugat două rezistoare (de 3kOhm, respectiv 4.7kOhm), care formează un divizor de tensiune pe pinul PA2 al convertorului ADC. Divizorul reduce tensiunea de 5V la o valoare de 3/(3+4.7)*5 = 1.948V. </p>
+<h2 style="text-align:center;"><img src="dh1.jpeg" alt="dh1" width="400" height="540" hspace="8"><img src="dh2.jpeg" alt="dh2" width="400" height="540" hspace="65"><img src="dh3.jpeg" alt="dh3" width="400" height="540"></h2>
+
+
+
+
+<h2><b>Schema electrica - OrCAD</b><br></h2>
+<h2 style="text-align:center;"><img src="schema_int.jpg" alt="schema_int" width="1450"  hspace="10"></h2>
+<h3><b>Am încărcat încă 4 poze ale schemei de mai sus pentru a se vedea mai bine textul și referințele componentelor:</b><br></h3>
+<p style="text-align:center;">1. Zoom pe butoanele corespunzătoare celor 4 opțiuni, precum și pe configurația: buzzer - tranzistor - rezistor</p>
+<h2 style="text-align:center;"><img src="zoom1.jpg" alt="schema_int"   width="750" height="700"></h2>
+<p style="text-align:center;">2. Zoom pe LED-urile colorate, corespunzătoare celor 4 opțiuni</p>
+<h2 style="text-align:center;"><img src="zoom2.jpg" alt="schema_int"   width="850" height="540" hspace="10"></h2>
+<p style="text-align:center;">3. Zoom pe cele două butoane de reglaj, respectiv pe o parte din configurația afișajelor cu 7 segmente și multiplexare</p>
+<h2 style="text-align:center;"><img src="zoom3.jpg" alt="schema_int"   width="1200" height="540" hspace="10"></h2>
+<p style="text-align:center;">4. Zoom pe a doua jumătate a configurației afișajelor cu 7 segmente și multiplexare</p>
+<h2 style="text-align:center;"><img src="zoom4.jpg" alt="schema_int"   width="1200" height="540" hspace="10"></h2>
+
+
+
+<h2><b>Explicații schemă electrică </b><br></h2>
+<p style="text-indent:3em;"> 
+În primul rând, pentru implementarea temei, am avut nevoie de 6 afișaje cu 7 segmente, ceea ce înseamnă 8*6=48 pini (considerând doar pinii pentru segmentele utilizate, fără cei pentru punctul zecimal și cel legat împreună cu pinul notat „catod comun”). Astfel, neavând atâția pini la dispoziție și considerând că este o metodă ineficientă conectarea fiecărui pin al afișajelor direct la microcontroller, am folosit tehnica multiplexării. </p>
+<p style="text-indent:3em;"> Pentru multiplexare, am adăugat 6 tranzistoare NPN, câte unul pentru fiecare afișaj. Tranzistoarele le-am conectat cu colectorul la pinul notat „catod comun” (al afișajelor) și cu emitorul la masă. Baza fiecăruia am conectat-o printr-un rezistor de 1kOhm (pentru limitarea curentului) la microcontroller (PC0-PC5). Segmentele de același tip ale afișajelor (de exemplu, toate segmentele numite „a”) au fost conectate împreună, apoi conectate printr-un rezistor de 220 Ohm la PORTA (PA0-PA6). Prin multiplexare, afișajele cu 7 segmente se aprind pe rând, însă suficient de rapid astfel încât ochiul uman să nu perceapă acest lucru, pentru utilizator, imaginea părând statică. Afișajul care vrem să fie aprins este selectat aplicând o tensiune în baza tranzistorului conectat la acesta. Astfel, odată ce se obține o tensiune VBE > 0.6V, tranzistorul se deschide, făcând ca LED-urile corespunzătoare respectivului afișaj să se aprindă. Utilizând această metodă, prin aprinderea pe rând a LED-urilor, am putut folosi mult mai puține porturi în acest scop, mai exact, doar 13 (7 segmente + 6 tranzistoare).</p>
+<p style="text-indent:3em;">Ne-am gândit ca fiecare opțiune să aibă asociat un LED de o anumită culoare. Astfel, pe lângă LED-ul roșu deja aflat pe plăcuță, am mai lipit încă trei de culori diferite (verde, galben, albastru), pe care le-am conectat prin rezistoare de 470 Ohm la PORTD (PD2-PD4).</p>
+<p style="text-indent:3em;">Pentru selecția opțiunilor, am folosit butoanele SW3-SW6, conectate la PORTB (PB0-PB3), iar pentru alarmă a fost necesar să adăugăm un buzzer, alături de un tranzistor NPN și un rezistor de 220 Ohm (conectate la PB5).
+Ulterior, am adăugat încă două butoane, SW7 și SW8, pentru a putea incrementa minutele/luna, respectiv ora/ziua. Pe acestea le-am conectat la PORTC (PC6-PC7).</p>
+
+
+</p>
+
+
+
+
+
+
+<h2><b>BOM - Bill of materials</b><br></h2>
+
+<!doctype html>
+<html>
+<head>
+	<title>HTML Editor - Full Version</title>
+</head>
+<body>
+<p style="text-align: center;">
+<table border="1" cellpadding="1" cellspacing="1">
+	<tbody>
+		<tr>
+			<td>
+			<table border="1" cellpadding="0" cellspacing="0">
+				<tbody>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:16px;">
+						<p align="center">&nbsp;</p>
+
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;"><strong>Cantitate</strong></span></span></p>
+
+						<p align="center">&nbsp;</p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:16px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;"><strong>Referință</strong></span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:16px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;"><strong>Valoare</strong></span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:16px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;"><strong>Capsulă</strong></span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:16px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;"><strong>Observații</strong></span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:16px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;"><strong>Furnizor, cod produs</strong></span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:16px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;"><strong>Preț unitar(lei)+TVA</strong></span></span></p>
+						</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">R1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">10k Ohm</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">805 SMD</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">C1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1uF</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">electrolitic</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">2</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">C2,C3</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">22pF</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">805 SMD</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">D2</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">LED rosu</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">5</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">C5,C6,C11,C12,C13</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">100nF</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">805 SMD</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">J1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">CON3</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT 3x100mils</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">Jumper 3 pini, EXT-USB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">U1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">ATMega164A</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">DIL40</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">pe soclu</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">X1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">20 MHz</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">pentru oscilatorul cu cuart</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">R2</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">470 Ohm</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">805 SMD</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">R3</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">4.7k Ohm</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">divizor de tensiune (cerinta)</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">R4</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">3k Ohm</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">divizor de tensiune (cerinta)</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">soclu DIL40</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">pentru U1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">F1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">FUSE</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">fir metalic</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">2</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">SW1,SW2</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">buton</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT 6x6x6</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">SW1 - USER, SW2 - RESET</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">CON2, CON2B</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">CON3_254</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT 3x100mils</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">USB TTL + alimentare</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">UPB</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">6</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">D3,D4,D5,D6,D7,D8</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">LED 7 segmente</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT 14x7.5mm</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">Catod comun</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">www.ardushop.ro, NSBVTK_seg-7</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1.8</span></span></p>
+						</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">5</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">SW3,SW4,SW5,SW6,SW7,SW8</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">buton</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT 6x6x6</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">sectiunea &quot;Modul de implementare&quot;</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">www.ardushop.ro, FGDJQJ_Push-SMALL-th-bk</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">0.29</span></span></p>
+						</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">4</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">D9,D10,D11,D12</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">LED-uri (culori:rosu, galben, albastru, verde)</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">sectiunea &quot;Modul de implementare&quot;</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">www.ardushop.ro, RWPBLQ_LED3_red</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">0.28</span></span></p>
+						</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">LS1</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">BUZZER</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">pentru alarma</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">www.ardushop.ro, TBPVWB_comp-buzz-passive</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">2.45</span></span></p>
+						</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">6</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">Q1,Q2,Q3,Q4,Q5,Q6, Q7</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">NPN</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">6 tranzistoare folosite in multiplexare si unul pentru buzzer</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">www.ardushop.ro, LPWYPQ_BC547BBK-DIO</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:15px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">0.99</span></span></p>
+						</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:54px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">8</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:54px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">R5,R6,R7,R8,R9,R10,R11,R18</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:54px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">220 Ohm</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:54px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:54px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">R18 folosita pentru buzzer</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:54px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">stoc propriu</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:54px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:46px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">6</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:46px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">R12,R13,R14,R15,R16,R17</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:46px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">1k Ohm</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:46px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:46px;">&nbsp;</td>
+						<td nowrap="nowrap" style="width:191px;height:46px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">stoc propriu</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:46px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap" style="width:71px;height:47px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">3</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:203px;height:47px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">R19,R20,R21</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:73px;height:47px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">470 Ohm</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:77px;height:47px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">THT</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:144px;height:47px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">folosite pentru limitarea curentului pentru LED-urile colorate</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:191px;height:47px;">
+						<p align="center"><span style="font-size:14px;"><span style="font-family:times new roman,times,serif;">stoc propriu</span></span></p>
+						</td>
+						<td nowrap="nowrap" style="width:104px;height:47px;">
+						<p align="center">&nbsp;</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+</p>
+</body>
+</html>
+
+<h3>Fotografii ale machetei în diverse etape:</h3>
+
+<h2 style="text-align:center;"><img src="macheta2.jpg" alt="dh1" width="400" height="540" hspace="8"><img src="macheta1.jpg" alt="dh2" width="400" height="540" hspace="65"><img src="macheta3.jpg" alt="dh3" width="400" height="540"></h2>
+
+
+<h2 style="text-align:center;"><img src="macheta4.jpg" alt="dh1" width="400" height="540" hspace="8"><img src="macheta5.jpg" alt="dh2" width="400" height="540" hspace="65"><img src="macheta6.jpg" alt="dh2" width="400" height="540">
+
+
+
+<hr>
+<h2>Descriere software</h2>
+<hr>
+
+<h3 style="text-align:center;">GRAF DE TRANZIȚII</h3>
+<h2 style="text-align:center;"><img src="graf_p2.png" alt="p2_graf"width="1300" height="800"   hspace="10"></h2>
+&nbsp;
+
+<h2>Explicații cod</h2>
+<p style="text-indent:3em;">
+Punctul de pornire și, în același timp, partea de cod care sta la baza întregului proiect o constituie instrucțiunile scrise în întrerupere (Timer1). Am ținut cont de faptul că există câte o întrerupere la fiecare secundă, valorile pentru OCR1AH și OCR1AL fiind setate în funcție de frecvența cuarțului de care dispunem (20MHz). Pentru a inițializa variabilele de timp, am decis să folosim structuri. Astfel, am definit inițial 3 structuri: Time, Cronometru, Alarma. Variabilele din cadrul acestora au fost numite sugestiv: an, luna, zi, ora, minut, secunda pentru cele folosite în cadrul opțiunilor Ceas și Calendar, precum și c_ora, c_minut, c_secunda pentru Cronometru și a_ora, a_minut și a_secunda pentru Alarmă. Nu am folosit aceleași variabile și aceeași structură pentru fiecare opțiune pentru a nu apărea probleme pe parcursul comutării între acestea.  Timpul curent a fost inițializat astfel încât să avem o valoare de pornire, iar pentru cronometru și alarmă au fost setate datele inițiale 00:00:00, pentru a putea seta alarma, respectiv porni cronometrul. </p>
+<p style="text-indent:3em;">În intrerupere inițial am incrementat secundele atât pentru ceas, cât și pentru cronometru și am realizat comparații în funcție de durată, prin intrucțiuni condiționale if(), pentru a seta limitele necesare: după ce se depășesc 60 de secunde minutele vor fi incrementate, iar secundele se vor reseta și așa mai departe până când lunile depășesc numărul 12 și astfel se va incrementa anul, care nu este limitat nicicum.  De asemenea, am realizat comparații diferite în funcție de numărul lunii din an, pentru a calcula corect numărul de zile pentru fiecare dintre luni, precum și cazul special în care există an bisect. Totodată, în ceea ce privește variabilele de care avem nevoie în cadrul opțiunii Cronometru, tot cu ajutorul instrucțiunilor condiționale if() am setat limitele pentru c_secunda, c_minut, c_ora. </p>
+<p style="text-indent:3em;">Știind că avem nevoie de a afișa toate variabilele de mai sus pe LED-urile cu 7 segmente, am decis să definim o funcție de afișare pe care o vom apela de mai multe ori în cadrul programului. 
+Aceasta primește 3 parametrii de intrare, pentru a putea fi apelată pe parcurs indiferent de opțiunea în care ne aflăm. În cadrul acesteia, am declarat niște variabile pe care le-am folosit pentru a afișa valoarea corespunzătoare pe fiecare dintre cele 6 afișaje (DD0-DD5). Fiecare dintre aceste variabile primește fie cifra zecilor, fie cifra unităților a fiecăreia dintre variabilele folosite pentru timp. Aceste cifre au fost calculate în binar și declarate global într-un vector numit cifra [11]. Acest vector conține atât cifrele de la 0-9, cât și caracterul A (am folosit afișarea acestuia în cadrul opțiunii Alarmă pentru a arăta că putem afișa și litere, nu numai cifre). Afișarea se realizează de la stânga la dreapta, astfel că DD0 va primi masca cifrei zecilor pentru primul parametru (param1), respectiv DD5 va primi masca cifrei unităților pentru cel de-al treilea parametru (param3). Pentru a aprinde afișajele pe rând (multiplexare) am folosit folosit o instrucțiune repetitivă for(), cu 10 iterații (număr ales astfel încât să se afișeze fiecare secundă). În cadrul acesteia, pe PORTA (portul care a fost inițializat ca OUTPUT pentru afisaje) au fost puse DD-urile și au fost pe rând selectate afișajele de la stânga la dreapta pentru a le aprinde, prin atribuirea valorii 1 pe cel pe care voiam sa fie aprins. Între aceste selecții am introdus o întârziere de o milisecundă, folosind funcția delay_ms() pentru ca ochiul uman să nu remarce aprinderea pe rând a afișajelor.</p>
+
+<p style="text-indent:3em;">
+OPȚIUNILE 1 și 2:
+Pentru a implementa propriu-zis partea de ceas, am folosit inițial instrucțiunea if() pentru a verifica dacă se apasă butonul SW3. Pentru a aprinde ledul corespunzător opțiunii am atribuit valoarea 1 pe LED1 (LED roșu), iar pe celelalte le-am stins, atribuind valoarea 0 pe fiecare dintre LED2, LED3, LED4. Aceastea trebuie stinse atunci când se realizează comutarea între opțiuni. Folosind o instrucțiune repetitivă do while() am realizat afișarea timpului pe afișajele cu 7 segmente. De data aceasta nu am putut folosi funcția definită mai sus, deoarece în cadrul acesteia am introdus și verificarea condiției de alarmă. După aceste instrucțiuni, am realizat partea de incrementare a variabilelor pentru timp, folosind butoanele SW7 și SW8. 
+Pentru opțiunea „Calendar”, am procedat similar, doar că afișările s-au realizat prin apelul funcției de afișare și nu mai apare partea de verificare a condiției pentru alarmă (buzzer). De asemenea, pentru ambele opțiuni, în cadrul instrucțiunilor repetitive while, au fost puse instrucțiuni break, pentru a putea ieși din buclele infinite și a trece în alte opțiuni.</p>
+
+<p style="text-indent:3em;">
+OPȚIUNEA 3:
+Prima parte (pentru apăsarea butonului și pentru aprinderea LED-ului corespunzător) a fost scrisă la fel ca pentru celelalte două opțiuni de mai sus. Ceea ce diferă este că după apăsarea butonului corespunzător, timp de o secundă, am afișat caracterul „A” pe primul afișaj din stânga, atribuind portului A valoarea în binar corespunzătoare acestui caracter și valoarea 1 doar primului afișaj.
+După o întârziere de o milisecundă, pe LED-urile cu 7 segmente afișăm 00 00 00, valoare de la care putem începe incrementarea prin intermediul „butoanelor de reglaj”. Această parte de incrementare a fost scrisă similar ca la implementarea ceasului. În plus, am folosit o variabilă „ok”, care ia valoarea 0 atunci când se încheie incrementarea și se alege o valoare pentru alarmă și valoarea 1 când se apasă butonul pentru oprirea alarmei. Astfel, putem seta să sune alarma de mai multe ori, la ore diferite.</p>
+<p style="text-indent:3em;">
+OPȚIUNEA 4:
+Și pentru această opțiune prima parte este identică cu celelalte. Ceea ce diferă este că am folosit o variabilă k pentru a contoriza de câte ori se apasă butonul SW6. La prima apăsare, afișăm caracterul „C” pe primul afișaj din stânga, la fel cum am procedat și pentru alarmă. La a doua apăsare, inițializăm cu 0 variabilele corespunzătoare cronometrului, care din acel moment cresc cu câte o secundă la fiecare întrerupere. La o a treia apăsare, reinițializăm valoarea lui k cu 0 ca după finalizarea instrucțiunilor din if să putem relua procesul explicat mai sus. Totodată, la această apăsare, oprim cronometrul (ieșind din if(k ==2)) și afișam valoarea cronometrată. Am folosit variabilele c0-c5 de tip static int pentru a putea memora valoarea cronometrată, ca aceasta să nu se mai modifice la fiecare întrerupere. </p>
+<p style="text-indent:3em;">
+În cadrul tuturor opțiunilor, am pus de mai multe ori break-uri, pentru a putea comuta în orice mod între cele 4 opțiuni.</p>
+
+</p>
+
+
+&nbsp;
+<h3 style="text-align:center;">PINI ȘI PORTURI</h3>
+<h2 style="text-align:center;"><img src="pini1.jpg" alt="p2_graf"width="400" height="500"   hspace="10"><img src="porturi1.jpg" alt="p2_graf"width="900" height="500"   hspace="10"></h2>
+&nbsp;
+
+
+
+<h3 style="text-align:center;">INFORMAȚIILE RAPORTATE DE COMPILATOR (memorie Flash, memorie RAM și EEPROM)</h3>
+<h2 style="text-align:center;"><img src="memorie1.jpg" alt="p2_graf"width="600" height="950"   hspace="10"></h2>
+
+
+
+
+
+<hr>
+<h2>Rezultate și concluzii</h2>
+<hr>
+
+<p style="text-indent:3em;">
+Inițial, am gândit implementarea acestui ceas folosind doar 4 butoane pentru selecția opțiunilor, respectiv pentru START și STOP la cronometru și pentru oprirea alarmei. În această variantă de implementare, ora curentă, data și ora pentru alarmă erau setate din cod (spre exemplu: static Time currentTime = { .an = 22, .luna = 06, .zi = 20, .ora = 08, .minut = 41, .secunda = 15 }, respectiv static Alarma alarmaTime = { .a_ora = 08, .a_minut = 45, .a_secunda = 00 }), astfel, în momentul în care alimentam ceasul, acesta funcționa normal (secundele erau incrementate la fiecare întrerupere), pornind de la datele inițiale setate.</p>
+
+<p style="text-indent:3em;">Ulterior, am observat că aceasta nu este o variantă eficientă din punctul de vedere al implementării unui ceas, deoarece, în mod normal, un utilizator ar trebui să aibă posibilitatea de a seta respectivele date manual, cum nu are acces la cod. Problema cea mai mare era însă setatul orei la care să sune alarma, deoarece o programasem astfel încât să sune în fiecare zi la aceeași oră. 
+
+Pentru a evita toate aceste situații și, în același timp, pentru funcționarea corectă a unui ceas, am mai adăugat încă două butoane, pe care noi le-am numit „butoane de reglaj” (SW7, SW8). Prin intermediul acestora, utilizatorul poate seta manual datele exemplificate mai sus, prin apăsare succesivă (incrementare lentă cu o singură unitate) sau apăsare lungă (incrementare rapidă).</p>
+
+<p style="text-indent:3em;">O îmbunătățire ar putea fi adăugarea unui alt buton, pentru setarea anului și dacă ne dorim mai multă precizie, pentru setarea secundelor. De asemenea, ne gândeam la realizarea unei carcase, pentru a proteja firele și totodată pentru a îmbunătăți aspectul proiectului (acoperirea microprocesorului și a componentelor pe care utilizatorul nu le folosește în utilizarea ceasului). 
+După cum am fost explicat în secțiunea „Descriere software”, afișarea pe LED-urile cu 7 segmente este destul de complexă și necesită un număr mare de instrucțiuni, astfel că o idee care a dus la optimizarea codului a fost realizarea unei funcții pentru afișare. Aceasta a fost apelată de foarte multe ori în cadrul programului. Astfel, am redus semnificativ numărul de linii de cod. </p>
+
+<p style="text-indent:3em;">După cum se poate observa în fotografia finală din cadrul secțiunii „Mod de implementare”, într-o primă etapă, am achiziționat un număr de LED-uri portocalii, pentru a indica opțiunea selectată de utilizator, însă această variantă nu era suficient de intuitivă, deoarece ar fi trebuit ca utilizatorul să se ghideze doar după poziția LED-urilor pe plăcuță, având toate aceeași culoare. Astfel, o îmbunătățire adusă a fost achiziționarea unor LED-uri de diferite culori. 
+
+Dacă acest ceas ar fi oferit unei persoane care nu cunoaște proiectul, am putea atașa o legendă a culorilor pentru LED-uri, precum și un manual de utilizare, cu detalierea rolului fiecărui buton și a modului de funcționare.</p>
+
+
+
+
+
+<h2>VIDEO</h2>
+<p>
+Am realizat un videoclip pentru a evidenția <strong>evaluarea de performanță a proiectului</strong>. În cadrul acestuia, am acționat conform următorilor pași:</p>
+<p>•	<strong>Setarea orei:</strong> am selectat opțiunea „Ceas”, apăsând butonul SW3, și am observat aprinderea LED-ului roșu, corespunzător acestei opțiuni. Apoi, am incrementat minutele și ora prin apăsarea succesivă pe butoanele SW7 și SW8 (la un moment dat, am apăsat și lung, pentru a seta mai rapid ora dorită). Se observă cum secundele cresc, astfel ceasul funcționează.<br>
+•	<strong>Setarea datei:</strong> am selectat opțiunea „Calendar”, apăsând butonul SW4, și am observat aprinderea LED-ului verde, corespunzător acestei opțiuni. Apoi, am incrementat luna și ziua prin apăsarea succesivă pe butoanele SW7 și SW8 (la un moment dat, am apăsat și lung, pentru a seta mai rapid data dorită).<br>
+•	<strong>Setarea alarmei:</strong> am selectat opțiunea „Alarmă”, apăsând butonul SW5, și am observat aprinderea LED-ului galben, corespunzător acestei opțiuni. În acest moment, pe primul afișaj cu 7 segmente apare caracterul „A”, acesta indicând utilizatorului că poate seta alarma. După o secundă, observăm cum caracterul dispare, iar pe afișaje apare 00 00 00, utilizatorul putând seta ora pentru alarmă prin apăsarea succesivă a butoanelor SW7 și SW8. Am setat o ora apropiată de cea curentă pentru a surprinde și momentul în care sună alarma.<br>
+•	<strong>Setare cronometru:</strong> am selectat opțiunea „Cronometru”, apăsând butonul SW6, și am observat aprinderea LED-ului albastru, corespunzător acestei opțiuni. La prima apăsare a butonului, pe primul afișaj cu 7 segmente apare caracterul „C”, acesta indicând utilizatorului că poate începe cronometrarea. La următoarea apăsare, se observă cum secundele sunt incrementate și astfel începe măsurarea unei durate de timp. La o a treia apăsare, cronometrul se oprește, durata măsurată putând fi citită de pe afișaje, până la următoarea apăsare.</p>
+
+</p>
+
+
+
+<p> 
+<h2 style="text-align:center;"><video width="500" controls>
+  <source src="P2_video.mp4" type="video/mp4">
+</video></h2>
+</p>
+<hr>
+
+<h2>Bibliografie</h2>
+<hr>
+
+<p>
+<li><a href="http://ham.elcom.pub.ro/proiect2/index.html">http://ham.elcom.pub.ro/proiect2/index.html</a>
+
+<li><a href="https://embedded-lab.com/blog/lab-11-multiplexing-seven-segment-led-displays/">https://embedded-lab.com/blog/lab-11-multiplexing-seven-segment-led-displays/</a>
+
+<li><a href="https://circuitdigest.com/microcontroller-projects/digital-alarm-clock-using-avr">https://circuitdigest.com/microcontroller-projects/digital-alarm-clock-using-avr</a>
+</p>
+
+
+
+
+
+</body>
+</html>

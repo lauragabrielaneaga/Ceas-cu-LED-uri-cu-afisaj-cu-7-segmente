@@ -1,0 +1,44 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+rx_buffer0                                                                        0x0200       8
+tx_buffer0                                                                        0x0208       8
+cifra                                                                             0x0210      22
+currentTime (main.c)                                                              0x0226       6
+cronometruTime (main.c)                                                           0x022C       3
+alarmaTime (main.c)                                                               0x022F       3
+c0 (main.c)                                                                       0x0232       2
+c1 (main.c)                                                                       0x0234       2
+c2 (main.c)                                                                       0x0236       2
+c3 (main.c)                                                                       0x0238       2
+c4 (main.c)                                                                       0x023A       2
+c5 (main.c)                                                                       0x023C       2
+_seed (stdlib.lib)                                                                0x023E       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+rx_wr_index0                                                                      R3           1
+rx_rd_index0                                                                      R2           1
+rx_counter0                                                                       R5           1
+rx_buffer_overflow0                                                               GPIOR0.0  1bit
+tx_wr_index0                                                                      R4           1
+tx_rd_index0                                                                      R7           1
+tx_counter0                                                                       R6           1
+minut_alarma                                                                      R8,R9        2
+ora_alarma                                                                        R10,R11      2
+ok                                                                                R12,R13      2
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+usart0_rx_isr                                                                     0x000A2     29
+usart0_tx_isr                                                                     0x000BF     21
+timer1_compa_isr                                                                  0x000D4    144
+afisare                                                                           0x00164     91
+main                                                                              0x001BF    632
+Init_initController                                                               0x00437    109
